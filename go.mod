@@ -1,4 +1,4 @@
-module github.com/damaredayo/image-to-mp4/img2mp4
+module github.com/damaredayo/img2mp4
 
 go 1.17
 
