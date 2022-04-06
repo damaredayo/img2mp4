@@ -20,8 +20,7 @@ var intRegex = regexp.MustCompile(`\d+`)
 type MP4Writer struct {
 	ffmpeg  ffmpeg.Command
 	output  string
-	width   int
-	height  int
+	size    string
 	fps     float64
 	bitrate int
 
@@ -30,7 +29,7 @@ type MP4Writer struct {
 	imageDirectory string
 }
 
-func New(output string, width int, height int, fps float64, bitrate int, imageDirectory string) (*MP4Writer, error) {
+func New(output string, size string, fps float64, bitrate int, imageDirectory string) (*MP4Writer, error) {
 
 	imageBytes := make([]byte, 0)
 
@@ -74,8 +73,7 @@ func New(output string, width int, height int, fps float64, bitrate int, imageDi
 
 	return &MP4Writer{
 		output:         output,
-		width:          width,
-		height:         height,
+		size:           size,
 		fps:            fps,
 		bitrate:        bitrate,
 		imageDirectory: imageDirectory,
@@ -96,7 +94,7 @@ func (m *MP4Writer) FfmpegStart() error {
 		InputOptions("-f image2pipe").
 		VideoBitRate(m.bitrate).
 		FrameRate(int(math.Floor(m.fps))).
-		Resolution(fmt.Sprintf("%vx%v", m.width, m.height))
+		Resolution(m.size)
 
 	go func() {
 		defer pw.Close()
